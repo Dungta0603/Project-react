@@ -1,0 +1,51 @@
+import { Button, TextField } from '@mui/material'
+import React, { useState } from 'react'
+import { createIngredientCategory } from '../../componet/State/Ingredients/Action';
+import { useDispatch, useSelector } from 'react-redux';
+
+const CreateIngredientCategoryForm = () => {
+  const dispatch = useDispatch();
+  const jwt = localStorage.getItem("jwt");
+  const {restaurant} = useSelector((store) => store)
+
+    const [formData,setFormData] =useState({
+        name:"",
+    })
+    const handleSubmit = (e) => {
+      e.preventDefault()
+      const data = {name:formData.name, restaurantId:restaurant.usersRestaurant.id}
+      console.log(formData)
+      dispatch(createIngredientCategory({data,jwt}))
+    }
+    const handleInputChange =(e) => {
+        const {name,value}=e.target
+        setFormData({
+            ...formData,[name]:value
+        })
+
+    }
+  return (
+    <div  className=''>
+        <div>
+            <h1 className='text-gray-400 text-center text-xl pb-10'>Thêm mới danh mục thành phần</h1>
+            <form className='space-y-5' onSubmit={handleSubmit}>
+<TextField 
+  fullWidth
+  id="name"
+  name="name"
+  label="Tên danh mục"
+  variant="outlined"
+  onChange={handleInputChange}
+  value={formData.name}>
+
+  </TextField>
+  <Button variant="contained" type="submit">
+    Hoàn tất
+  </Button>
+  </form>
+        </div>
+    </div>
+  )
+}
+
+export default CreateIngredientCategoryForm
